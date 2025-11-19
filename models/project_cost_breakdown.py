@@ -7,7 +7,7 @@ class ProjectCostBreakdown(models.Model):
     name = fields.Char("Breakdown Description" , required=True)
     estimate_id = fields.Many2one("project.cost.estimate" , "Cost Estimate" , ondelete="cascade")
     cost = fields.Float("Cost")
-    quantity = fields.Float("Quantity")
+    quantity = fields.Integer("Quantity" , default=1)
     subtotal = fields.Float("Subtotal" , compute="_compute_subtotal")
     currency_id = fields.Many2one("res.currency" , "Currency")
 

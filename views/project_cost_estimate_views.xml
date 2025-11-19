@@ -17,11 +17,27 @@
         <field name="arch" type="xml">
             <form string="Project Cost Estimate">
                 <sheet>
+                    <header>
+                        <button name="action_submit" string="Submit" type="object" class="oe_highlight"
+                                groups="project_cost_estimate.project_cost_estimate_group_manager"
+                                invisible="state != 'draft'"
+                        />
+                        <button name="action_approve" string="Approve" type="object" class="oe_highlight"
+                                groups="project_cost_estimate.project_cost_estimate_group_approver"
+                                invisible="state != 'submitted'"/>
+                        <button name="action_reject" string="Reject" type="object" class="btn btn-danger"
+                                groups="project_cost_estimate.project_cost_estimate_group_approver"
+                                invisible="state != 'submitted'"/>
+                        <button name="action_set_to_draft" string="Return to Draft" type="object" class="btn btn-info"
+                                groups="project_cost_estimate.project_cost_estimate_group_approver"
+                                invisible="state != 'rejected'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
                     <group>
-                        <field name="name"/>
-                        <field name="project_id"/>
+                        <field name="name" readonly="state in ['submitted', 'approved', 'rejected']"/>
+                        <field name="project_id" readonly="state in ['submitted', 'approved', 'rejected']"/>
                         <field name="estimated_total_cost"/>
-                        <field name="breakdown_ids"/>
+                        <field name="breakdown_ids" readonly="state in ['submitted', 'approved', 'rejected']"/>
                     </group>
                 </sheet>
             </form>
@@ -32,11 +48,38 @@
         <field name="name">project.cost.estimate.list</field>
         <field name="model">project.cost.estimate</field>
         <field name="arch" type="xml">
-            <list string="Project Cost Estimates">
-                <field name="name"/>
-                <field name="project_id"/>
-                <field name="estimated_total_cost"/>
+            <list string="Project Cost Estimates"
+                  decoration-success="state == 'approved'"
+                  decoration-danger="state == 'rejected'"
+                  decoration-warning="state == 'submitted'"
+                  decoration-info="state == 'draft'">
+                <field name="name" string="Cost Estimate"/>
+                <field name="project_id" string="Project"/>
+                <field name="estimated_total_cost" string="Total Cost"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"
+                       decoration-warning="state == 'submitted'"
+                       decoration-info="state == 'draft'"
+                />
             </list>
+        </field>
+    </record>
+
+    <record id="project_cost_estimate_search_view" model="ir.ui.view">
+        <field name="name">project.cost.estimate.search</field>
+        <field name="model">project.cost.estimate</field>
+        <field name="arch" type="xml">
+            <search string="Project Cost Estimates">
+                <field name="name"/>
+                <field name="state"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <filter string="Group by Project" name="group_by_project" context="{'group_by':'project_id'}"/>
+                <filter string="Group by State" name="group_by_state" context="{'group_by':'state'}"/>
+            </search>
         </field>
     </record>
 </odoo>
