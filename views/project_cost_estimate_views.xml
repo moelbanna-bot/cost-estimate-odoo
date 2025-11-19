@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_create_project_cost_estimate" model="ir.actions.act_window">
+        <field name="name">Create Project Cost Estimate</field>
+        <field name="res_model">project.cost.estimate</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create and manage your project cost estimates here.
+            </p>
+        </field>
+    </record>
+
+    <record id="Project_cost_estimate_form_view" model="ir.ui.view">
+        <field name="name">project.cost.estimate.form</field>
+        <field name="model">project.cost.estimate</field>
+        <field name="arch" type="xml">
+            <form string="Project Cost Estimate">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="project_id"/>
+                        <field name="estimated_total_cost"/>
+                        <field name="breakdown_ids"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="project_cost_estimate_list_view" model="ir.ui.view">
+        <field name="name">project.cost.estimate.list</field>
+        <field name="model">project.cost.estimate</field>
+        <field name="arch" type="xml">
+            <list string="Project Cost Estimates">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="estimated_total_cost"/>
+            </list>
+        </field>
+    </record>
+</odoo>

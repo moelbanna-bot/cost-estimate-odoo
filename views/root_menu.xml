@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <menuitem
+            id="project_cost_estimate_root_menu"
+            name="Project Cost Estimate"
+    />
+    <menuitem
+            id="project_cost_estimate_create_menu"
+            name="Create Project Cost Estimate"
+            parent="project_cost_estimate_root_menu"
+            action="action_create_project_cost_estimate"
+    />
+</odoo>
