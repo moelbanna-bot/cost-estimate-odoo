@@ -53,11 +53,16 @@ class ProjectCostEstimate(models.Model):
                     if not rec._is_allowed_state_transition(rec.state, new_state):
                         raise UserError(f"Can't transition from {rec.state} to {new_state}")
 
-        if 'state' in vals and vals['state'] == 'approved':
-            if not self.env.user.has_group('project_cost_estimate.project_cost_estimate_group_approver'):
-                raise UserError('You do not have permission to change the stete to Approved.')
+                if rec.state == 'rejected' and new_state == 'draft':
+                    if not self.env.user.has_group('project_cost_estimate.project_cost_estimate_group_manager'):
+                        raise UserError("Only a manager can reset a rejected estimate back to draft.")
 
-        return super(ProjectCostEstimate, self).write(vals)
+                if new_state in ['approved' , 'rejected']:
+                    if not self.env.user.has_group('project_cost_estimate.project_cost_estimate_group_approver'):
+                        raise UserError("You do not have permission to approve cost estimates.")
+
+
+            return super(ProjectCostEstimate, self).write(vals)
 
     def action_submit(self):
         # print("Submitting Cost Estimate...")
@@ -65,7 +70,7 @@ class ProjectCostEstimate(models.Model):
 
     def action_approve(self):
         self.send_mail('approved')
-        self.write({"state":"approved"})
+        self.change_state("approved")
 
     def action_reject(self):
         self.send_mail('rejected')
