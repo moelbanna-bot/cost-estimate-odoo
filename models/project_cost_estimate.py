@@ -43,7 +43,7 @@ class ProjectCostEstimate(models.Model):
             # print(f" record state : {rec.state}")
             if not rec._is_allowed_state_transition(rec.state,new_state):
                 raise UserError(f"Can't transition from {rec.state} to {new_state}")
-            return self.write({"state":new_state})
+        return self.write({"state":new_state})
 
     def write(self, vals):
         if 'state' in vals:
