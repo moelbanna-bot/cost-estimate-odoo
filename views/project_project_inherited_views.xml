@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_project_project_form_inherit_cost_estimate" model="ir.ui.view">
+        <field name="name">project.project.form.inherit.cost.estimate</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="action_view_cost_estimates"
+                        icon="fa-calculator"
+                        groups="project.group_project_user">
+                    <field string="Cost Estimates" name="cost_estimate_count" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_project_project_kanban_inherit_cost_estimate" model="ir.ui.view">
+        <field name="name">project.project.kanban.inherit.cost.estimate</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="inside">
+                <field name="latest_cost_estimate_total"/>
+                <field name="latest_cost_estimate_state"/>
+            </xpath>
+
+            <xpath expr="//footer" position="after">
+                <div class="d-flex justify-content-between me-1 mt-2"
+                     t-if="record.latest_cost_estimate_total.raw_value"
+                >
+                    <div>
+                        <span class="text-muted small">Latest Cost Analysis:</span>
+                        <span class="o_kanban_record_bottom fw-bold">
+                            <field name="latest_cost_estimate_total"
+                                   widget="monetary"
+                            />
+                        </span>
+                    </div>
+                    <div class="d-flex gap-3">
+
+                        <div class="d-flex gap-1">
+                            <span class="text-muted">State:</span>
+                            <span t-attf-class="d-flex align-items-center justify-content-center badge rounded-pill {{
+                            record.latest_cost_estimate_state.raw_value == 'approved' ? 'text-bg-success' :
+                            record.latest_cost_estimate_state.raw_value == 'rejected' ? 'text-bg-danger' :
+                            record.latest_cost_estimate_state.raw_value == 'submitted' ? 'text-bg-warning' : 'text-bg-secondary'
+                        }}">
+                                <field name="latest_cost_estimate_state"/>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
