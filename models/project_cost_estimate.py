@@ -1,4 +1,5 @@
 from odoo import models,fields,api
+from odoo.exceptions import UserError
 
 
 class ProjectCostEstimate(models.Model):
@@ -39,18 +40,31 @@ class ProjectCostEstimate(models.Model):
 
     def change_state(self,new_state):
         for rec in self:
-            print(f" record state : {rec.state}")
-            if rec._is_allowed_state_transition(rec.state,new_state):
-                rec.state = new_state
-            else:
-                continue
+            # print(f" record state : {rec.state}")
+            if not rec._is_allowed_state_transition(rec.state,new_state):
+                raise UserError(f"Can't transition from {rec.state} to {new_state}")
+            return self.write({"state":new_state})
+
+    def write(self, vals):
+        if 'state' in vals:
+            new_state = vals['state']
+            for rec in self:
+                if rec.state != new_state:
+                    if not rec._is_allowed_state_transition(rec.state, new_state):
+                        raise UserError(f"Can't transition from {rec.state} to {new_state}")
+
+        if 'state' in vals and vals['state'] == 'approved':
+            if not self.env.user.has_group('project_cost_estimate.project_cost_estimate_group_approver'):
+                raise UserError('You do not have permission to change the stete to Approved.')
+
+        return super(ProjectCostEstimate, self).write(vals)
 
     def action_submit(self):
-        print("Submitting Cost Estimate...")
+        # print("Submitting Cost Estimate...")
         self.change_state("submitted")
 
     def action_approve(self):
-        self.change_state("approved")
+        self.write({"state":"approved"})
 
     def action_reject(self):
         self.change_state("rejected")
