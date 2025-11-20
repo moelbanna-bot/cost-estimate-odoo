@@ -50,4 +50,37 @@
         <field name="perm_unlink" eval="0"/>
     </record>
 
+    <record id="project_cost_breakdown_rule_user" model="ir.rule">
+        <field name="name">Project Cost Breakdown User Rule</field>
+        <field name="model_id" ref="model_project_cost_breakdown"/>
+        <field name="groups" eval="[(4, ref('project_cost_estimate_group_user'))]"/>
+        <field name="domain_force">[("estimate_id.create_uid" , "=" , user.id)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <record id="project_cost_breakdown_rule_manager" model="ir.rule">
+        <field name="name">Project Cost Breakdown Manager Rule</field>
+        <field name="model_id" ref="model_project_cost_breakdown"/>
+        <field name="groups" eval="[(4, ref('project_cost_estimate_group_manager'))]"/>
+        <field name="domain_force">[(1,"=",1)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <record id="project_cost_breakdown_rule_approver" model="ir.rule">
+        <field name="name">Project Cost Breakdown Approver Rule</field>
+        <field name="model_id" ref="model_project_cost_breakdown"/>
+        <field name="groups" eval="[(4, ref('project_cost_estimate_group_approver'))]"/>
+        <field name="domain_force">[("estimate_id.state", "in", ["submitted", "approved", "rejected"])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
 </odoo>
