@@ -6,6 +6,7 @@
     "data" : [
         "security/project_cost_estimate_security.xml",
         "security/ir.model.access.csv",
+        "data/mail_template.xml",
         "views/project_cost_estimate_views.xml",
         "views/project_project_inherited_views.xml",
         "views/root_menu.xml",

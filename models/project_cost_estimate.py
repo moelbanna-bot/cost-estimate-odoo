@@ -64,10 +64,18 @@ class ProjectCostEstimate(models.Model):
         self.change_state("submitted")
 
     def action_approve(self):
+        self.send_mail('approved')
         self.write({"state":"approved"})
 
     def action_reject(self):
+        self.send_mail('rejected')
         self.change_state("rejected")
 
     def action_set_to_draft(self):
         self.change_state("draft")
+
+    def send_mail(self,state):
+        if state == 'approved':
+            self.message_post_with_source('project_cost_estimate.mail_template_cost_estimate_approved')
+        elif state == 'rejected':
+            self.message_post_with_source('project_cost_estimate.mail_template_cost_estimate_rejected')
