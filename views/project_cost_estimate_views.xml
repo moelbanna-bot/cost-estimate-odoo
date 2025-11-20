@@ -29,7 +29,7 @@
                                 groups="project_cost_estimate.project_cost_estimate_group_approver"
                                 invisible="state != 'submitted'"/>
                         <button name="action_set_to_draft" string="Return to Draft" type="object" class="btn btn-info"
-                                groups="project_cost_estimate.project_cost_estimate_group_approver"
+                                groups="project_cost_estimate.project_cost_estimate_group_manager"
                                 invisible="state != 'rejected'"/>
                         <field name="state" widget="statusbar"/>
                     </header>
