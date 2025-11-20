@@ -62,6 +62,7 @@
                        decoration-warning="state == 'submitted'"
                        decoration-info="state == 'draft'"
                 />
+                <field name="created_by" class="created-by"/>
             </list>
         </field>
     </record>
@@ -77,6 +78,9 @@
                 <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
                 <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
                 <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+                <filter string="All Records" name="all_records"
+                        domain="['|' , ('active' , '=' , True) , ('active' , '=' , False)] "/>
                 <filter string="Group by Project" name="group_by_project" context="{'group_by':'project_id'}"/>
                 <filter string="Group by State" name="group_by_state" context="{'group_by':'state'}"/>
             </search>

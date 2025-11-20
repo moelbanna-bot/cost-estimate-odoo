@@ -5,6 +5,7 @@ class ProjectCostEstimate(models.Model):
     _name = "project.cost.estimate"
     _description = "Project Cost Estimate Model"
     _order = "id desc"
+    _inherit = ["soft.delete.model"]
 
     name = fields.Char("Cost Estimate Name" , required=True)
     project_id = fields.Many2one("project.project" , "Linked Project" , required=True)
@@ -17,7 +18,7 @@ class ProjectCostEstimate(models.Model):
             ("rejected" , "Rejected"),
         ] , default="draft" , tracking=True)
 
-
+    created_by = fields.Many2one("res.users" , "Created By" , default=lambda self: self.env.user.id)
     @api.depends("breakdown_ids.subtotal")
     def _compute_total_cost(self):
         for rec in self:
