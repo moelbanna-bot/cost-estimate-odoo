@@ -1,0 +1,11 @@
+.created-by {
+    font-weight: bold;
+}
+.o_list_view_modern .o_data_row {
+    transition: all 0.15s ease;
+}
+
+.o_list_view_modern .o_data_row:hover {
+    background-color: #f8f9fa !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}

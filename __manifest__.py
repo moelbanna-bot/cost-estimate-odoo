@@ -14,7 +14,7 @@
     "depends" : ["base", "project" , "mail"],
     "assets" : {
         "web.assets_backend" : [
-            "project_cost_estimate/static/src/project_cost_estimate.css",
+            "project_cost_estimate/static/src/css/project_cost_estimate.css",
         ],
         "web.assets_qweb" : [],
     },

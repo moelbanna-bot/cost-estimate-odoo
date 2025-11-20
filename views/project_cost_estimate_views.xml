@@ -16,27 +16,50 @@
         <field name="model">project.cost.estimate</field>
         <field name="arch" type="xml">
             <form string="Project Cost Estimate">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="oe_highlight"
+                            groups="project_cost_estimate.project_cost_estimate_group_manager"
+                            invisible="state != 'draft'"
+                    />
+                    <button name="action_approve" string="Approve" type="object" class="oe_highlight"
+                            groups="project_cost_estimate.project_cost_estimate_group_approver"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_reject" string="Reject" type="object" class="btn btn-danger"
+                            groups="project_cost_estimate.project_cost_estimate_group_approver"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_set_to_draft" string="Return to Draft" type="object" class="btn btn-info"
+                            groups="project_cost_estimate.project_cost_estimate_group_manager"
+                            invisible="state != 'rejected'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
                 <sheet>
-                    <header>
-                        <button name="action_submit" string="Submit" type="object" class="oe_highlight"
-                                groups="project_cost_estimate.project_cost_estimate_group_manager"
-                                invisible="state != 'draft'"
-                        />
-                        <button name="action_approve" string="Approve" type="object" class="oe_highlight"
-                                groups="project_cost_estimate.project_cost_estimate_group_approver"
-                                invisible="state != 'submitted'"/>
-                        <button name="action_reject" string="Reject" type="object" class="btn btn-danger"
-                                groups="project_cost_estimate.project_cost_estimate_group_approver"
-                                invisible="state != 'submitted'"/>
-                        <button name="action_set_to_draft" string="Return to Draft" type="object" class="btn btn-info"
-                                groups="project_cost_estimate.project_cost_estimate_group_manager"
-                                invisible="state != 'rejected'"/>
-                        <field name="state" widget="statusbar"/>
-                    </header>
-                    <group>
-                        <field name="name" readonly="state in ['submitted', 'approved', 'rejected']"/>
-                        <field name="project_id" readonly="state in ['submitted', 'approved', 'rejected']"/>
-                        <field name="estimated_total_cost"/>
+                    <div class="oe_title">
+                        <label for="name" string="Cost Estimate"/>
+                        <h1>
+                            <field placeholder="Cost Analysis Name..." name="name"
+                                   readonly="state in ['submitted', 'approved', 'rejected']"/>
+                        </h1>
+                    </div>
+                    <group string="Project Details">
+                        <group>
+                            <field name="project_id" readonly="state in ['submitted', 'approved', 'rejected']"/>
+                        </group>
+                        <group>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="p-3">
+                                            <div class="text-muted small mb-1">Total Estimated Cost</div>
+                                            <h2 class="mb-0">
+                                                <field name="estimated_total_cost" widget="monetary"/>
+                                            </h2>
+                                            <div class="text-muted small mb-1">Created By</div>
+                                            <field name="created_by" readonly="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </group>
                         <field name="breakdown_ids" readonly="state in ['submitted', 'approved', 'rejected']"/>
                     </group>
                 </sheet>
@@ -48,21 +71,23 @@
         <field name="name">project.cost.estimate.list</field>
         <field name="model">project.cost.estimate</field>
         <field name="arch" type="xml">
-            <list string="Project Cost Estimates"
+             <list string="Cost Estimates"
                   decoration-success="state == 'approved'"
                   decoration-danger="state == 'rejected'"
                   decoration-warning="state == 'submitted'"
-                  decoration-info="state == 'draft'">
-                <field name="name" string="Cost Estimate"/>
-                <field name="project_id" string="Project"/>
-                <field name="estimated_total_cost" string="Total Cost"/>
+                  decoration-muted="state == 'draft'"
+                  multi_edit="1"
+                  class="o_list_view_modern">
+                <field name="name" string="Cost Estimate" class="fw-bold"/>
+                <field name="project_id"/>
+                <field name="estimated_total_cost" class="fw-semibold"/>
+                <field name="created_by" string="Created By" widget="many2one_avatar_user"/>
                 <field name="state" widget="badge"
                        decoration-success="state == 'approved'"
                        decoration-danger="state == 'rejected'"
                        decoration-warning="state == 'submitted'"
-                       decoration-info="state == 'draft'"
-                />
-                <field name="created_by" class="created-by"/>
+                       decoration-info="state == 'draft'"/>
+                <field name="create_date" string="Created On" widget="date"/>
             </list>
         </field>
     </record>
