@@ -3,7 +3,7 @@
     <record id="action_create_project_cost_estimate" model="ir.actions.act_window">
         <field name="name">Create Project Cost Estimate</field>
         <field name="res_model">project.cost.estimate</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create and manage your project cost estimates here.
@@ -84,6 +84,76 @@
                 <filter string="Group by Project" name="group_by_project" context="{'group_by':'project_id'}"/>
                 <filter string="Group by State" name="group_by_state" context="{'group_by':'state'}"/>
             </search>
+        </field>
+    </record>
+
+    <record id="view_project_cost_estimate_kanban" model="ir.ui.view">
+        <field name="name">project.cost.estimate.kanban</field>
+        <field name="model">project.cost.estimate</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" quick_create="false">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="estimated_total_cost"/>
+                <field name="state"/>
+                <field name="created_by"/>
+                <field name="create_date"/>
+                <field name="activity_ids"/>
+                <templates>
+                    <t t-name="card" class="flex-row mb-2">
+                        <div class="o_kanban_record d-flex flex-column">
+                            <div class="o_kanban_card_header d-flex justify-content-between align-items-start mb-2">
+                                <div class="fw-bold fs-6 flex-grow-1">
+                                    <field name="name"/>
+                                </div>
+                                <span class="badge rounded-pill ms-2" t-attf-class="bg-{{
+                                    record.state.raw_value == 'approved' ? 'success' :
+                                    record.state.raw_value == 'rejected' ? 'danger' :
+                                    record.state.raw_value == 'submitted' ? 'warning text-dark' : 'secondary'
+                                }}">
+                                    <field name="state"/>
+                                </span>
+                            </div>
+
+                            <div class="o_kanban_card_content flex-grow-1">
+                                <div class="row g-2 mb-3">
+                                    <div class="col-12">
+                                        <div class="o_kanban_card_section">
+                                            <div class="text-muted small mb-1">Project</div>
+                                            <div class="fw-semibold">
+                                                <field name="project_id"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="o_kanban_card_section o_kanban_highlight">
+                                            <div class="text-muted small mb-1">Estimated Cost</div>
+                                            <div class="fs-4 fw-bold text-primary">
+                                                <field name="estimated_total_cost" widget="monetary"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-muted small">
+                                    <div class="mb-1">
+                                        <i class="fa fa-clock-o me-1" title="Date"/>
+                                        <span>Created At</span>
+                                        <field name="create_date" widget="date"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom pt-2 mt-2 border-top">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <field name="created_by" widget="many2one_avatar_user"/>
+                                    <field name="activity_ids" widget="kanban_activity"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 </odoo>

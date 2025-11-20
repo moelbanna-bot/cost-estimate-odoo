@@ -5,7 +5,7 @@ class ProjectCostEstimate(models.Model):
     _name = "project.cost.estimate"
     _description = "Project Cost Estimate Model"
     _order = "id desc"
-    _inherit = ["soft.delete.model"]
+    _inherit = ["soft.delete.model" , "mail.thread" , "mail.activity.mixin"]
 
     name = fields.Char("Cost Estimate Name" , required=True)
     project_id = fields.Many2one("project.project" , "Linked Project" , required=True)
